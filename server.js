@@ -1,25 +1,49 @@
-const express = require ("express");
-const mysql = require ("mysql")
-const app =express();
+const express = require("express");
+const mysql = require("mysql")
+const app = express();
 const cors = require("cors");
-const  bodyparser =  require("body-parser");
+const bodyparser = require("body-parser");
+const { error } = require("console");
 app.use((cors));
 app.use((bodyparser));
-app.listen(3000,()=>(
+app.listen(3000, () => (
     console.log("a szerver a 3000-es porton fut.")
 ))
 
-const db  = mysql.createConnection(
+const db = mysql.createConnection(
     {
         user: "root",
         host: "localhost",
-        port:3307,
-        password:"",
-        database:"teliolimpia"
+        port: 3307,
+        password: "",
+        database: "teliolimpia",
     }
 )
- //a szerver futásának ellenörzése// 
- app.get("/",(req,res) => {
-    res.send("SzerverMüködik")
- }
+//a szerver futásának ellenörzése// 
+app.get("/", (req, res) => {
+    res.send("Szerver Müködik")
+}
 )
+app.get("/v", (req, res) => {
+    const sql = "SELECT * FROM teliolimpia.versenyzok"
+    db.query(sql, (err, result) => {
+        if (err) 
+            return res.json(err);
+    })
+})
+app.get("/v6", (req, res) => {
+    const sql = "SELECT * FROM teliolimpia.versenyzok WHERE ID = 6"
+    db.query(sql, (err, result) => {
+        if (err) 
+            return res.json(err);
+    })
+})
+
+
+app.post("/v6", (req, res) => {
+    const sql = "SELECT * FROM teliolimpia.versenyzok WHERE ID = 6"
+    db.query(sql, (err, result) => {
+        if (err) 
+            return res.json(err);
+    })
+})
