@@ -3,12 +3,11 @@ const mysql = require("mysql")
 const app = express();
 const cors = require("cors");
 const bodyparser = require("body-parser");
-const { error } = require("console");
 app.use((cors));
 app.use((bodyparser));
-app.listen(3000, () => (
+app.listen(3000, () => {
     console.log("a szerver a 3000-es porton fut.")
-))
+})
 
 const db = mysql.createConnection(
     {
@@ -25,25 +24,26 @@ app.get("/", (req, res) => {
 }
 )
 app.get("/v", (req, res) => {
-    const sql = "SELECT * FROM teliolimpia.versenyzok"
+    const sql = "SELECT * FROM teliolimpia.versenyzok";
     db.query(sql, (err, result) => {
-        if (err) 
-            return res.json(err);
+        if (err)
+            return res.json(result);
     })
 })
 app.get("/v6", (req, res) => {
-    const sql = "SELECT * FROM teliolimpia.versenyzok WHERE ID = 6"
+    const sql = "SELECT * FROM teliolimpia.versenyzok WHERE ID = 6";
     db.query(sql, (err, result) => {
-        if (err) 
-            return res.json(err);
+        if (err)
+            return res.json(result);
     })
 })
 
 
 app.post("/v6", (req, res) => {
-    const sql = "SELECT * FROM teliolimpia.versenyzok WHERE ID = 6"
+    const sql = "INSERT INTO 'versenyzok' ('ID','versenyzo') VALUES(?,?)";
+    const VALUES = (null, req.body.versenyzo);
     db.query(sql, (err, result) => {
-        if (err) 
-            return res.json(err);
+        if (err) return res.status(500).json({ error: "hibás adatbáis müvelet" });
+        return res.json(result);
     })
 })
